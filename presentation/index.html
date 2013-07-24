@@ -23,6 +23,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1" />
     <title>HTML5 presentation</title>
     <link href="http://fonts.googleapis.com/css?family=Droid+Sans|Droid+Sans+Mono" rel="stylesheet" type="text/css" />
+    <script src="jquery.min.js"></script>
     <style>
       body {
         font: 20px "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
@@ -422,6 +423,18 @@
         font-size: 90%;
       }
     </style>
+
+  <script type="text/javascript">
+    function update(property, sel, target){
+      if(sel.value=='true'){
+        $('#'+target).prop(property, true);
+      }
+      else{
+        $('#'+target).prop(property, false);
+      }
+    }
+  </script>
+
   </head> 
   <body> 
     <div class="presentation"> 
@@ -521,8 +534,8 @@
           <section class=""> 
             <header><h2>Attributes</h2></header>
             <h3>Placeholder</h3>
-            <input type="text" placeholder="Placeholder text goes here" style="width:500px;">
-            <pre>&lt;field type="text" hint="Placeholder text goes here" /&gt;</pre>
+            <input type="text" placeholder="Placeholder text goes here" id="hint" style="width:500px;">
+            <pre>&lt;field type="text" hint="<input type="text" onkeyup="document.getElementById('hint').placeholder = this.value;">" /&gt;</pre>
             <p class="text">
               In non supported browsers set color of placeholder by using css on placeholder class. For example 
             </p>
@@ -538,12 +551,10 @@
             <header><h2>Attributes</h2></header>
             <h3>Required</h3>
             <form>
-              <input type="text" required placeholder="This is a required field." style="width:500px;">
+              <input type="text" id="requiredField" required placeholder="This is a required field." style="width:500px;">
               <button>Submit</button>
             </form>
-            <pre>&lt;field type="text" required="true" /&gt;
-&lt;field type="text" required="1" /&gt;
-&lt;field type="text" required="required" /&gt;</pre>
+            <pre>&lt;field type="text" required="<select onchange="update('required',this,'requiredField');"><option value="false">false</option><option value="true" selected>true</option><option value="true">1</option><option value="true">required</option></select>" /&gt;</pre>
             <p class="text">
               Browsers which supports HTML5 provide feedback whose UI depends upon browser itsef. But in non supported browsers feedback is provided by adding required and invalid class to the field. So developers can set css
               to display invalid or required elements in highlight. For example
@@ -577,19 +588,15 @@
             <header><h2>Attributes</h2></header>
             <h3>Multiple</h3>
             <form>
-            <input type="email" multiple placeholder="You can enter more than one emails." style="width:500px;">
+            <input type="email" multiple id="multipleEmailField" placeholder="You can enter more than one emails." style="width:500px;">
             <button>Submit</button>
             </form>
-            <pre>&lt;field type="email" multiple="true" /&gt;
-&lt;field type="email" multiple="1" /&gt;
-&lt;field type="email" multiple="multiple" /&gt;</pre>
+            <pre>&lt;field type="email" multiple="<select onchange="update('multiple',this,'multipleEmailField');"><option value="false">false</option><option value="true" selected>true</option><option value="true">1</option><option value="true">multiple</option></select>" /&gt;</pre>
             <form>
-            <input type="file" multiple placeholder="You can select more than one files." style="width:500px;">
+            <input type="file" id="multipleFileField" multiple placeholder="You can select more than one files." style="width:500px;">
             <button>Submit</button>
             </form>
-            <pre>&lt;field type="file" multiple="true" /&gt;
-&lt;field type="file" multiple="1" /&gt;
-&lt;field type="file" multiple="multiple" /&gt;</pre>
+            <pre>&lt;field type="file" multiple="<select onchange="update('multiple',this,'multipleFileField');"><option value="false">false</option><option value="true" selected>true</option><option value="true">1</option><option value="true">multiple</option></select>" /&gt;</pre>
             <p class="text">
               Fallback is provided for only multiple emails only.
             </p>
@@ -621,9 +628,10 @@
               <option value="Option 3">Opt3</option>
             </datalist>
             <pre>&lt;field type="text"&gt;
-      &lt;option value="Option 1"&gt;Opt1&lt;/option&gt;
-      &lt;option value="Option 2"&gt;Opt2&lt;/option&gt;
-      &lt;option value="Option 3"&gt;Opt3&lt;/option&gt;
+      <textarea onchange="$('#listforabove').html(this.value);" style="font-size:100%;width:385px;height:60px;">
+&lt;option value="Option 1"&gt;Opt1&lt;/option&gt;
+&lt;option value="Option 2"&gt;Opt2&lt;/option&gt;
+&lt;option value="Option 3"&gt;Opt3&lt;/option&gt;</textarea>
 &lt;/field&gt;
 </pre>
             <p>This attribute still doesn't have fallback.</p>
@@ -650,11 +658,11 @@
           <section class=""> 
             <header><h2>Attributes</h2></header>
             <h3>Spellcheck</h3>
-            <input type="text" spellcheck="false" placeholder="Spell check is off" style="width:500px;">
-            <input type="text" spellcheck="true" placeholder="Spell check is on" style="width:500px;">
+            <input type="text" id="spell" spellcheck="true" placeholder="Spell check is on" style="width:500px;">
             <pre>&lt;field type="text" spellcheck="off" /&gt;
 &lt;field type="text" spellcheck="0" /&gt;
 &lt;field type="text" spellcheck="false" /&gt;
+&lt;field type="text" spellcheck="<input type="text" onchange="update('spellcheck',this,'spell');" value="true">" /&gt;
 </pre>
             <p>No Fallback</p>
             <p class="text">Test it in a <a target="_blank" href="http://googlesummerofcode2.cloudaccess.net/index.php/demo#spellcheck"> Joomla site</a></p>
@@ -679,8 +687,8 @@
           <section class=""> 
             <header><h2>Attributes</h2></header>
             <h3>Accept</h3>
-            <input type="file" accept="text/js" placeholder="Uploads only js files" style="width:500px;">
-            <pre>&lt;field type="file" accept="text/js" /&gt;</pre>
+            <input type="file" id="fileField" accept="text/js" placeholder="Uploads only js files" style="width:500px;">
+            <pre>&lt;field type="file" accept="<input type="text" value="text/js" onchange="$('#fileField').attr('accept',this.value);">" /&gt;</pre>
             <p>No Fallback</p>
             <p class="text">Test it in a <a target="_blank" href="http://googlesummerofcode2.cloudaccess.net/index.php/demo#accept"> Joomla site</a></p>
           </section> 
